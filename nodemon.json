@@ -1,0 +1,5 @@
+{
+  "events": {
+    "restart": "tsoa spec-and-routes"
+  }
+}
