@@ -8,5 +8,9 @@ Backend for announcements.
 
 - Note that in order to run the database locally, you will need to have MongoDB installed.
 
-2. Run `yarn install` to install dependencies.
+2. Run `yarn` to install dependencies.
 3. Start the development server by running `yarn dev`. To run the production build instead, use `yarn build` followed by `yarn start`.
+
+## Styling
+
+- If using VSCode, install the Prettier extension and configure your settings to use it.
