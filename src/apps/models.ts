@@ -3,7 +3,9 @@ import {
   prop,
   modelOptions,
   Severity,
+  Ref,
 } from "@typegoose/typegoose";
+import { Announcement } from "../announcements/models";
 
 @modelOptions({
   schemaOptions: {
@@ -17,9 +19,12 @@ import {
   },
   options: { allowMixed: Severity.ALLOW },
 })
-export class Review {
+export class App {
   @prop()
-  public reviewerName!: string;
+  public name!: string;
+
+  @prop({ unique: true })
+  public slug!: string;
 }
 
-export const ReviewModel = getModelForClass(Review);
+export const AppModel = getModelForClass(App);
