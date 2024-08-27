@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node -r dotenv/confic src/index.ts",
+    "start": "tsoa spec-and-routes && ts-node -r dotenv/config src/index.ts",
     "dev": "tsoa spec-and-routes && nodemon -r dotenv/config src/index.ts --watch src --config nodemon.json",
     "build": "tsoa spec-and-routes && tsc --outDir build --experimentalDecorators"
   },
