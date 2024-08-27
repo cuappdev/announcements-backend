@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 // Default Route
 app.get("/", (req, res) => {
-  return res.send("Welcome to announcements-backend!");
+  return res.sendFile("index.html", { root: __dirname });
 });
 
 // Swagger API Docs
