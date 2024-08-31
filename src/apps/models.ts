@@ -3,9 +3,8 @@ import {
   prop,
   modelOptions,
   Severity,
-  Ref,
 } from "@typegoose/typegoose";
-import { Announcement } from "../announcements/models";
+import { Types } from "mongoose";
 
 @modelOptions({
   schemaOptions: {

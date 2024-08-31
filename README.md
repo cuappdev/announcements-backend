@@ -11,6 +11,11 @@ Backend for announcements.
 2. Run `yarn` to install dependencies.
 3. Start the development server by running `yarn dev`. To run the production build instead, use `yarn build` followed by `yarn start`.
 
+## Testing
+
+1. Make sure dependencies are installed with `yarn`.
+2. To run the test suite, use `yarn test`.
+
 ## Styling
 
 - If using VSCode, install the Prettier extension and configure your settings to use it.

@@ -44,6 +44,29 @@ export class AnnouncementService {
     announcementId: Types.ObjectId,
     announcementData: AnnouncementUpdateParams
   ) => {
+    const oldAnnouncement = await AnnouncementModel.findById(announcementId);
+    if (!oldAnnouncement) {
+      throw new InvalidArgumentError("Invalid announcementId supplied");
+    }
+
+    // Validate dates
+    if (announcementData.startDate && announcementData.endDate) {
+      // Pass in both start and end
+      if (!isDateBefore(announcementData.startDate, announcementData.endDate)) {
+        throw new InvalidArgumentError("Start date must be before end date");
+      }
+    } else if (announcementData.startDate) {
+      // Pass in start only
+      if (!isDateBefore(announcementData.startDate, oldAnnouncement.endDate)) {
+        throw new InvalidArgumentError("Start date must be before end date");
+      }
+    } else if (announcementData.endDate) {
+      // Pass in end only
+      if (!isDateBefore(oldAnnouncement.startDate, announcementData.endDate)) {
+        throw new InvalidArgumentError("Start date must be before end date");
+      }
+    }
+
     const updatedAnnouncement = await AnnouncementModel.findByIdAndUpdate(
       announcementId,
       {
