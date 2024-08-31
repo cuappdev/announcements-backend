@@ -4,7 +4,6 @@ import {
   modelOptions,
   Severity,
 } from "@typegoose/typegoose";
-import { Types } from "mongoose";
 
 @modelOptions({
   schemaOptions: {
