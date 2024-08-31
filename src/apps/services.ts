@@ -84,9 +84,10 @@ export class AppService {
    * Validate if the given app slugs exist.
    *
    * @param slugs The slug nicknames of the app.
-   * @throws InvalidArgumentError when invalid slugs are supplied.
+   * @throws InvalidArgumentError when invalid slugs (existing) are supplied,
+   *  otherwise promise of true.
    */
-  public validateAppSlugs = async (slugs: string[]) => {
+  public validateAppSlugs = async (slugs: string[]): Promise<boolean> => {
     const apps = await AppModel.find().select("slug");
     const allSlugs = apps.map((d: App) => d.slug);
 
@@ -95,6 +96,6 @@ export class AppService {
         throw new InvalidArgumentError(`The slug [${slug}] does not exist.`);
       }
     }
-    return;
+    return true;
   };
 }
