@@ -1,4 +1,4 @@
-export const exampleUser1 = {
+export const exampleUser = {
   id: "65f3c6c85ec12921d8bbd0e3",
   isAdmin: true,
   imageUrl:
@@ -7,13 +7,4 @@ export const exampleUser1 = {
   name: "Vin Bui",
 };
 
-export const exampleUser2 = {
-  id: "65f3c6c85ec12921d8bbd0e4",
-  isAdmin: false,
-  imageUrl:
-    "https://media.licdn.com/dms/image/v2/D4E03AQGe3o27d-Y5Eg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1725558867182?e=1731542400&v=beta&t=JatU-XhdnisKyaWefPALJdB-3lU44C1RtkXY-uhPs6A",
-  email: "lj295@cornell.edu",
-  name: "Lauren Jun",
-};
-
-export const exampleUsers = [exampleUser1, exampleUser2];
+export const exampleUsers = [exampleUser];
