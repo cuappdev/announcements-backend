@@ -3,14 +3,17 @@ import {
   Controller,
   Example,
   Get,
+  Path,
   Post,
+  Put,
   Route,
   SuccessResponse,
 } from "tsoa";
 import { UserService } from "./services";
 import { exampleUser, exampleUsers } from "./examples";
 import { User } from "./models";
-import { UserCreationParams } from "./types";
+import { UserCreationParams, UserUpdateParams } from "./types";
+import { Types } from "mongoose";
 
 @Route("users")
 export class UserController extends Controller {
@@ -44,5 +47,21 @@ export class UserController extends Controller {
   public async createUser(@Body() req: UserCreationParams): Promise<User> {
     this.setStatus(201);
     return this.userService.insertUser(req);
+  }
+
+  /**
+   * Update a user with the given ID.
+   *
+   * @param userId The ID of the user to update.
+   * @param req The user data in the request body.
+   * @returns The updated User object.
+   */
+  @Put("{userId}")
+  @Example(exampleUser)
+  public async updateUser(
+    @Path() userId: Types.ObjectId,
+    @Body() req: UserUpdateParams
+  ): Promise<User> {
+    return this.userService.updateUser(userId, req);
   }
 }
