@@ -66,4 +66,19 @@ export class UserService {
     }
     return deletedUser;
   };
+
+  /**
+   * Fetch a user from the database.
+   *
+   * @param userId The ID of the user to fetch.
+   * @throws InvalidArgumentError when an invalid id is supplied.
+   * @returns A promise resolving to the user document or error.
+   */
+  public getUserById = async (userId: Types.ObjectId) => {
+    const fetchedUser = await UserModel.findById(userId);
+    if (!fetchedUser) {
+      throw new InvalidArgumentError("Invalid userId supplied");
+    }
+    return fetchedUser;
+  };
 }

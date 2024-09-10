@@ -76,4 +76,16 @@ export class UserController extends Controller {
   public async deleteUser(@Path() userId: Types.ObjectId): Promise<User> {
     return this.userService.deleteUser(userId);
   }
+
+  /**
+   * Get a user by ID.
+   *
+   * @param userId The ID of the user to fetch.
+   * @returns A User object.
+   */
+  @Get("{userId}")
+  @Example(exampleUser)
+  public async getUser(@Path() userId: Types.ObjectId): Promise<User> {
+    return this.userService.getUserById(userId);
+  }
 }
