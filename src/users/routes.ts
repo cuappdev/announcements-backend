@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Example,
   Get,
   Path,
@@ -63,5 +64,16 @@ export class UserController extends Controller {
     @Body() req: UserUpdateParams
   ): Promise<User> {
     return this.userService.updateUser(userId, req);
+  }
+
+  /**
+   * Delete a user.
+   *
+   * @returns The User object that was deleted.
+   */
+  @Delete("{userId}")
+  @Example(exampleUser)
+  public async deleteUser(@Path() userId: Types.ObjectId): Promise<User> {
+    return this.userService.deleteUser(userId);
   }
 }
