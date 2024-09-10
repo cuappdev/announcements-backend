@@ -51,4 +51,19 @@ export class UserService {
     }
     return updatedUser;
   };
+
+  /**
+   * Delete a user in the database.
+   *
+   * @param userId The ID of the user to delete.
+   * @throws InvalidArgumentError when an invalid id is supplied.
+   * @returns A promise resolving to the deleted user document.
+   */
+  public deleteUser = async (userId: Types.ObjectId) => {
+    const deletedUser = await UserModel.findByIdAndDelete(userId);
+    if (!deletedUser) {
+      throw new InvalidArgumentError("Invalid userId supplied");
+    }
+    return deletedUser;
+  };
 }
