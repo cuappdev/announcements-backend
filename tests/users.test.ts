@@ -292,3 +292,53 @@ describe("deleteUser", () => {
     expect(getResponse).toHaveLength(0);
   });
 });
+
+describe("getUserById", () => {
+  let userService: UserService;
+
+  beforeAll(async () => {
+    await connectDB();
+    await UserModel.createCollection();
+    await UserModel.syncIndexes();
+    userService = new UserService();
+  });
+
+  afterAll(async () => {
+    await UserModel.deleteMany({});
+    await disconnectDB();
+  });
+
+  beforeEach(async () => {
+    await UserModel.deleteMany({});
+  });
+
+  it("should return a user with valid id", async () => {
+    // given
+    const mocks = await UserFactory.create(1);
+    const mockUser = mocks[0];
+    const insertResponse = await UserModel.create(mockUser);
+
+    // when
+    const getResponse = await userService.getUserById(insertResponse._id);
+
+    // then
+    expect(getResponse.email).toStrictEqual(mockUser.email);
+    expect(getResponse.imageUrl).toStrictEqual(mockUser.imageUrl);
+    expect(getResponse.isAdmin).toStrictEqual(mockUser.isAdmin);
+    expect(getResponse.name).toStrictEqual(mockUser.name);
+  });
+
+  it("should throw an error for invalid id", async () => {
+    // given
+    const mocks = await UserFactory.create(1);
+    const mockUser = mocks[0];
+    const mockId = new Types.ObjectId();
+    await UserModel.create(mockUser);
+
+    // when
+    const getRequest = async () => await userService.getUserById(mockId);
+
+    // then
+    await expect(getRequest).rejects.toThrow(InvalidArgumentError);
+  });
+});
