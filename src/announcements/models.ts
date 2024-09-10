@@ -3,7 +3,9 @@ import {
   prop,
   modelOptions,
   Severity,
+  Ref,
 } from "@typegoose/typegoose";
+import { User } from "../users/models";
 
 @modelOptions({
   schemaOptions: {
@@ -23,6 +25,12 @@ export class Announcement {
 
   @prop()
   public body!: string;
+
+  /**
+   * @ignore See https://github.com/lukeautry/tsoa/issues/626.
+   */
+  @prop({ ref: () => User })
+  public creator?: Ref<User>;
 
   @prop()
   public endDate!: Date;
