@@ -293,7 +293,7 @@ describe("deleteUser", () => {
   });
 });
 
-describe("getUserById", () => {
+describe("getUserByEmail", () => {
   let userService: UserService;
 
   beforeAll(async () => {
@@ -312,14 +312,14 @@ describe("getUserById", () => {
     await UserModel.deleteMany({});
   });
 
-  it("should return a user with valid id", async () => {
+  it("should return a user with valid email", async () => {
     // given
     const mocks = await UserFactory.create(1);
     const mockUser = mocks[0];
-    const insertResponse = await UserModel.create(mockUser);
+    await UserModel.create(mockUser);
 
     // when
-    const getResponse = await userService.getUserById(insertResponse._id);
+    const getResponse = await userService.getUserByEmail(mockUser.email);
 
     // then
     expect(getResponse.email).toStrictEqual(mockUser.email);
@@ -328,15 +328,15 @@ describe("getUserById", () => {
     expect(getResponse.name).toStrictEqual(mockUser.name);
   });
 
-  it("should throw an error for invalid id", async () => {
+  it("should throw an error for invalid email", async () => {
     // given
     const mocks = await UserFactory.create(1);
     const mockUser = mocks[0];
-    const mockId = new Types.ObjectId();
+    const mockEmail = faker.string.alpha({ length: { min: 5, max: 10 } });
     await UserModel.create(mockUser);
 
     // when
-    const getRequest = async () => await userService.getUserById(mockId);
+    const getRequest = async () => await userService.getUserByEmail(mockEmail);
 
     // then
     await expect(getRequest).rejects.toThrow(InvalidArgumentError);
