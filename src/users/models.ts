@@ -22,13 +22,13 @@ export class User {
   public email!: string;
 
   @prop()
-  public imageUrl!: string;
+  public imageUrl?: string;
 
   @prop({ default: false })
   public isAdmin!: boolean;
 
   @prop()
-  public name!: string;
+  public name?: string;
 }
 
 export const UserModel = getModelForClass(User);

@@ -4,10 +4,14 @@ import swaggerUI from "swagger-ui-express";
 import { RegisterRoutes } from "../build/routes";
 import { dbConnect } from "./database";
 import { errorMiddleware } from "./middleware/errorMiddleware";
+import { authMiddleware } from "./middleware/authMiddleware";
 
 // Express Server
 const app = express();
 app.use(bodyParser.json());
+
+// Define auth middleware first
+app.use(authMiddleware);
 
 // Default Route
 app.get("/", (req, res) => {
@@ -22,7 +26,7 @@ app.use("/api-docs", swaggerUI.serve, async (req: Request, res: Response) => {
 });
 RegisterRoutes(app);
 
-// Define middleware last
+// Define error middleware last
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT || 8000, async () => {

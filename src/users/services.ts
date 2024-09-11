@@ -70,14 +70,14 @@ export class UserService {
   /**
    * Fetch a user from the database.
    *
-   * @param userId The ID of the user to fetch.
+   * @param email The email of the user to fetch.
    * @throws InvalidArgumentError when an invalid id is supplied.
    * @returns A promise resolving to the user document or error.
    */
-  public getUserById = async (userId: Types.ObjectId) => {
-    const fetchedUser = await UserModel.findById(userId);
+  public getUserByEmail = async (email: string) => {
+    const fetchedUser = await UserModel.findOne({ email });
     if (!fetchedUser) {
-      throw new InvalidArgumentError("Invalid userId supplied");
+      throw new InvalidArgumentError("Invalid email supplied");
     }
     return fetchedUser;
   };

@@ -13,7 +13,7 @@ import {
 import { UserService } from "./services";
 import { exampleUser, exampleUsers } from "./examples";
 import { User } from "./models";
-import { UserCreationParams, UserUpdateParams } from "./types";
+import { UserCreationParams, UserLoginParams, UserUpdateParams } from "./types";
 import { Types } from "mongoose";
 
 @Route("users")
@@ -78,14 +78,20 @@ export class UserController extends Controller {
   }
 
   /**
-   * Get a user by ID.
+   * Authenticate a user when logged in.
    *
-   * @param userId The ID of the user to fetch.
+   * @param req The user login data in the request body.
    * @returns A User object.
    */
-  @Get("{userId}")
+  @Post("login")
   @Example(exampleUser)
-  public async getUser(@Path() userId: Types.ObjectId): Promise<User> {
-    return this.userService.getUserById(userId);
+  public async authenticateUser(@Body() req: UserLoginParams): Promise<User> {
+    // Get user by email and update
+    const user = await this.userService.getUserByEmail(req.email);
+    const updatedUser = await this.userService.updateUser(user._id, {
+      name: req.name,
+      imageUrl: req.imageUrl,
+    });
+    return updatedUser;
   }
 }
