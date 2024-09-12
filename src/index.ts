@@ -10,9 +10,6 @@ import { authMiddleware } from "./middleware/authMiddleware";
 const app = express();
 app.use(bodyParser.json());
 
-// Define auth middleware first
-app.use(authMiddleware);
-
 // Default Route
 app.get("/", (req, res) => {
   return res.sendFile("index.html", { root: __dirname });
@@ -24,6 +21,10 @@ app.use("/api-docs", swaggerUI.serve, async (req: Request, res: Response) => {
     swaggerUI.generateHTML(await import("../build/swagger.json"))
   );
 });
+
+// Define auth middleware first
+app.use(authMiddleware);
+
 RegisterRoutes(app);
 
 // Define error middleware last

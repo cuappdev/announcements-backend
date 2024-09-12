@@ -8,7 +8,7 @@ export const authMiddleware = async (
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
-  // Exclude getActiveAnnouncements route
+  // Exclude getActiveAnnouncements and API docs route
   const routePattern = /^\/announcements\/\w+/;
   if (routePattern.test(req.path)) {
     return next();
