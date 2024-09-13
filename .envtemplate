@@ -1,5 +1,4 @@
-NODE_ENV=[insert here, either 'local', 'development', or 'production']
-LOCAL_URI=[insert here]
+NODE_ENV=[insert here, either 'dev', or 'prod']
 DEV_URI=[insert here]
 PROD_URI=[insert here]
 CLIENT_ID=[insert here]

@@ -33,21 +33,39 @@ describe("getAnnouncements", () => {
     await AnnouncementModel.deleteMany({});
   });
 
-  it("should return no announcements", async () => {
+  it("should return no announcements no debug", async () => {
+    // given
+    const isDebug = false;
+
     // when
-    const getResponse = await announcementService.getAnnouncements();
+    const getResponse = await announcementService.getAnnouncements(isDebug);
 
     // then
     expect(getResponse).toHaveLength(0);
   });
 
-  it("should return 5 announcements", async () => {
+  it("should return 5 announcements no debug", async () => {
     // given
     const announcements = await AnnouncementFactory.create(5);
+    const isDebug = false;
     await AnnouncementModel.create(announcements);
 
     // when
-    const getResponse = await announcementService.getAnnouncements();
+    const getResponse = await announcementService.getAnnouncements(isDebug);
+
+    // then
+    expect(getResponse).toHaveLength(5);
+  });
+
+  it("should return 5 announcements with debug", async () => {
+    // given
+    const announcements = await AnnouncementFactory.create(5);
+    announcements.forEach((ann) => (ann.isDebug = true));
+    const isDebug = true;
+    await AnnouncementModel.create(announcements);
+
+    // when
+    const getResponse = await announcementService.getAnnouncements(isDebug);
 
     // then
     expect(getResponse).toHaveLength(5);
@@ -73,7 +91,7 @@ describe("insertAnnouncements", () => {
     await AnnouncementModel.deleteMany({});
   });
 
-  it("should have the same fields as the mock", async () => {
+  it("should have the same fields as the mock no debug", async () => {
     // given
     const mocks = await AnnouncementFactory.create(1);
     const mockAnnouncement = mocks[0];
@@ -88,6 +106,29 @@ describe("insertAnnouncements", () => {
     expect(insertResponse.body).toStrictEqual(mockAnnouncement.body);
     expect(insertResponse.endDate).toStrictEqual(mockAnnouncement.endDate);
     expect(insertResponse.imageUrl).toStrictEqual(mockAnnouncement.imageUrl);
+    expect(insertResponse.isDebug).toStrictEqual(mockAnnouncement.isDebug);
+    expect(insertResponse.link).toStrictEqual(mockAnnouncement.link);
+    expect(insertResponse.startDate).toStrictEqual(mockAnnouncement.startDate);
+    expect(insertResponse.title).toStrictEqual(mockAnnouncement.title);
+  });
+
+  it("should have the same fields as the mock with debug", async () => {
+    // given
+    const mocks = await AnnouncementFactory.create(1);
+    const mockAnnouncement = mocks[0];
+    mockAnnouncement.isDebug = true;
+
+    // when
+    const insertResponse = await announcementService.insertAnnouncement(
+      mockAnnouncement
+    );
+
+    // then
+    expect(insertResponse.apps).toStrictEqual(mockAnnouncement.apps);
+    expect(insertResponse.body).toStrictEqual(mockAnnouncement.body);
+    expect(insertResponse.endDate).toStrictEqual(mockAnnouncement.endDate);
+    expect(insertResponse.imageUrl).toStrictEqual(mockAnnouncement.imageUrl);
+    expect(insertResponse.isDebug).toStrictEqual(mockAnnouncement.isDebug);
     expect(insertResponse.link).toStrictEqual(mockAnnouncement.link);
     expect(insertResponse.startDate).toStrictEqual(mockAnnouncement.startDate);
     expect(insertResponse.title).toStrictEqual(mockAnnouncement.title);
@@ -219,6 +260,7 @@ describe("updateAnnouncements", () => {
     expect(updateRequest.body).toStrictEqual(newBody);
     expect(updateRequest.endDate).toStrictEqual(mockAnnouncement.endDate);
     expect(updateRequest.imageUrl).toStrictEqual(mockAnnouncement.imageUrl);
+    expect(updateRequest.isDebug).toStrictEqual(mockAnnouncement.isDebug);
     expect(updateRequest.link).toStrictEqual(mockAnnouncement.link);
     expect(updateRequest.startDate).toStrictEqual(mockAnnouncement.startDate);
     expect(updateRequest.title).toStrictEqual(mockAnnouncement.title);
@@ -232,6 +274,7 @@ describe("updateAnnouncements", () => {
     expect(getRequest[0].body).toStrictEqual(newBody);
     expect(getRequest[0].endDate).toStrictEqual(mockAnnouncement.endDate);
     expect(getRequest[0].imageUrl).toStrictEqual(mockAnnouncement.imageUrl);
+    expect(getRequest[0].isDebug).toStrictEqual(mockAnnouncement.isDebug);
     expect(getRequest[0].link).toStrictEqual(mockAnnouncement.link);
     expect(getRequest[0].startDate).toStrictEqual(mockAnnouncement.startDate);
     expect(getRequest[0].title).toStrictEqual(mockAnnouncement.title);
@@ -260,6 +303,7 @@ describe("updateAnnouncements", () => {
     expect(updateRequest.body).toStrictEqual(newBody);
     expect(updateRequest.endDate).toStrictEqual(mockAnnouncement.endDate);
     expect(updateRequest.imageUrl).toStrictEqual(mockAnnouncement.imageUrl);
+    expect(updateRequest.isDebug).toStrictEqual(mockAnnouncement.isDebug);
     expect(updateRequest.link).toStrictEqual(mockAnnouncement.link);
     expect(updateRequest.startDate).toStrictEqual(mockAnnouncement.startDate);
     expect(updateRequest.title).toStrictEqual(newTitle);
@@ -273,6 +317,7 @@ describe("updateAnnouncements", () => {
     expect(getRequest[0].body).toStrictEqual(newBody);
     expect(getRequest[0].endDate).toStrictEqual(mockAnnouncement.endDate);
     expect(getRequest[0].imageUrl).toStrictEqual(mockAnnouncement.imageUrl);
+    expect(getRequest[0].isDebug).toStrictEqual(mockAnnouncement.isDebug);
     expect(getRequest[0].link).toStrictEqual(mockAnnouncement.link);
     expect(getRequest[0].startDate).toStrictEqual(mockAnnouncement.startDate);
     expect(getRequest[0].title).toStrictEqual(newTitle);
@@ -341,6 +386,7 @@ describe("deleteAnnouncements", () => {
     expect(deleteResponse.body).toStrictEqual(mockAnnouncement.body);
     expect(deleteResponse.endDate).toStrictEqual(mockAnnouncement.endDate);
     expect(deleteResponse.imageUrl).toStrictEqual(mockAnnouncement.imageUrl);
+    expect(deleteResponse.isDebug).toStrictEqual(mockAnnouncement.isDebug);
     expect(deleteResponse.link).toStrictEqual(mockAnnouncement.link);
     expect(deleteResponse.startDate).toStrictEqual(mockAnnouncement.startDate);
     expect(deleteResponse.title).toStrictEqual(mockAnnouncement.title);

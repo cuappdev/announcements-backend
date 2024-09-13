@@ -4,9 +4,9 @@ Backend for announcements.
 
 ## Getting Started
 
-1. Duplicate the `.envtemplate` file and rename it to `.env`. Set `NODE_ENV` to either `local`, `development`, or `production`. Then, set `LOCAL_URI`, `DEV_URI` and `PROD_URI` to the MongoDB drvie connection URIs for all 3 environments.
+1. Duplicate the `.envtemplate` file and rename it to `.env`. Set `NODE_ENV` to `dev`, then set `DEV_URI` to `mongodb://localhost:27017/announcements-dev`.
 
-- For AppDev members, the local `.env` file is pinned in the `#announcements-dev` channel.
+- For AppDev members, the development `.env` file is pinned in the `#announcements-dev` channel.
 - Note that in order to run the database locally, you will need to have MongoDB installed.
 
 2. Run `yarn` to install dependencies.

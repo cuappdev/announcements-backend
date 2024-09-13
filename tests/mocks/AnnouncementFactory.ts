@@ -25,6 +25,7 @@ class AnnouncementFactory {
     mockAnnouncement.body = faker.string.alpha({ length: { min: 5, max: 10 } });
     mockAnnouncement.endDate = faker.date.future();
     mockAnnouncement.imageUrl = faker.image.url();
+    mockAnnouncement.isDebug = false;
     mockAnnouncement.link = faker.internet.url();
     mockAnnouncement.startDate = faker.date.between({
       from: new Date(),

@@ -1,11 +1,9 @@
-import mongoose, { ConnectOptions } from "mongoose";
+import mongoose from "mongoose";
 
 export const dbConnect = async () => {
   // Determine environment
-  let uri = process.env.LOCAL_URI;
-  if (process.env.NODE_ENV === "development") {
-    uri = process.env.DEV_URI;
-  } else if (process.env.NODE_ENV === "production") {
+  let uri = process.env.DEV_URI;
+  if (process.env.NODE_ENV === "prod") {
     uri = process.env.PROD_URI;
   }
 

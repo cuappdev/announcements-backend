@@ -8,10 +8,14 @@ export class AnnouncementService {
   /**
    * Fetch all announcements from the database.
    *
+   * @param isDebug Whether to fetch announcements that are for debugging purposes.
    * @returns A promise resolving to all announcements or error.
    */
-  public getAnnouncements = async () => {
-    return await AnnouncementModel.find();
+  public getAnnouncements = async (isDebug: boolean) => {
+    if (isDebug) {
+      return await AnnouncementModel.find({ isDebug: true });
+    }
+    return await AnnouncementModel.find({ isDebug: false });
   };
 
   /**

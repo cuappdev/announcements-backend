@@ -11,6 +11,7 @@ import {
   Path,
   Post,
   Put,
+  Query,
   Route,
   SuccessResponse,
 } from "tsoa";
@@ -35,8 +36,10 @@ export class AnnouncementController extends Controller {
    */
   @Get()
   @Example(exampleAnnouncements)
-  public async getAllUsers(): Promise<Announcement[]> {
-    return this.announcementService.getAnnouncements();
+  public async getAllAnnouncements(
+    @Query() debug: boolean
+  ): Promise<Announcement[]> {
+    return this.announcementService.getAnnouncements(debug);
   }
 
   /**
@@ -99,8 +102,9 @@ export class AnnouncementController extends Controller {
    */
   @Get("{slug}")
   public async activeAnnouncements(
-    @Path() slug: string
+    @Path() slug: string,
+    @Query() debug: boolean
   ): Promise<Announcement[]> {
-    return this.appService.getActiveAnnouncements(slug);
+    return this.appService.getActiveAnnouncements(slug, debug);
   }
 }

@@ -8,6 +8,7 @@ export const exampleAnnouncement = {
   endDate: "2024-08-16T03:00:00Z",
   imageUrl:
     "https://appdev-upload.nyc3.digitaloceanspaces.com/announcements/pc6k6o8z.png",
+  isDebug: false,
   link: "https://www.instagram.com/p/C4ft4SyOaUj/",
   startDate: "2024-08-15T03:00:00Z",
   title: "Demo Day",
