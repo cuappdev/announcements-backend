@@ -70,13 +70,23 @@ export class AppService {
    * Fetch all active announcements from the database for a given app.
    *
    * @param slug The slug nickname of the app.
+   * @param isDebug Whether to fetch announcements that are for debugging purposes.
    * @returns A promise resolving to the active announcements or error.
    */
-  public getActiveAnnouncements = async (slug: string) => {
+  public getActiveAnnouncements = async (slug: string, isDebug: boolean) => {
+    if (isDebug) {
+      return await AnnouncementModel.find({
+        apps: slug,
+        startDate: { $lte: new Date() },
+        endDate: { $gte: new Date() },
+        isDebug: true,
+      });
+    }
     return await AnnouncementModel.find({
       apps: slug,
       startDate: { $lte: new Date() },
       endDate: { $gte: new Date() },
+      isDebug: false,
     });
   };
 

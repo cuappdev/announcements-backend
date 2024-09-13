@@ -3,6 +3,7 @@ export type AnnouncementCreationParams = {
   body: string;
   endDate: Date;
   imageUrl: string;
+  isDebug: boolean;
   link: string;
   startDate: Date;
   title: string;
@@ -13,6 +14,7 @@ export type AnnouncementUpdateParams = {
   body?: string;
   endDate?: Date;
   imageUrl?: string;
+  isDebug?: boolean;
   link?: string;
   startDate?: Date;
   title?: string;

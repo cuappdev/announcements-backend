@@ -293,21 +293,25 @@ describe("getActiveAnnouncements", () => {
     await AppModel.deleteMany({});
   });
 
-  it("should return no active announcements with incorrect slug", async () => {
+  it("should return no active announcements with incorrect slug no debug", async () => {
     // given
     const mockApp = (await AppFactory.create(1))[0];
     const mockAnnouncement = (await AnnouncementFactory.create(1))[0];
     await AppModel.create(mockApp);
     await AnnouncementModel.create(mockAnnouncement);
+    const isDebug = false;
 
     // when
-    const response = await appService.getActiveAnnouncements(mockApp.slug);
+    const response = await appService.getActiveAnnouncements(
+      mockApp.slug,
+      isDebug
+    );
 
     // then
     expect(response).toHaveLength(0);
   });
 
-  it("should return no active announcements with correct slug", async () => {
+  it("should return no active announcements with correct slug no debug", async () => {
     // given
     const mockApp = (await AppFactory.create(1))[0];
     const mockAnnouncement = (await AnnouncementFactory.create(1))[0];
@@ -315,15 +319,19 @@ describe("getActiveAnnouncements", () => {
     mockAnnouncement.startDate = mockAnnouncement.endDate;
     await AppModel.create(mockApp);
     await AnnouncementModel.create(mockAnnouncement);
+    const isDebug = false;
 
     // when
-    const response = await appService.getActiveAnnouncements(mockApp.slug);
+    const response = await appService.getActiveAnnouncements(
+      mockApp.slug,
+      isDebug
+    );
 
     // then
     expect(response).toHaveLength(0);
   });
 
-  it("should return one active announcement with correct slug", async () => {
+  it("should return one active announcement with correct slug no debug", async () => {
     // given
     const mockApp = (await AppFactory.create(1))[0];
     const mockAnnouncements = await AnnouncementFactory.create(2);
@@ -343,16 +351,20 @@ describe("getActiveAnnouncements", () => {
     const activeAnnouncement = await AnnouncementModel.create(
       mockAnnouncements[1]
     );
+    const isDebug = false;
 
     // when
-    const response = await appService.getActiveAnnouncements(mockApp.slug);
+    const response = await appService.getActiveAnnouncements(
+      mockApp.slug,
+      isDebug
+    );
 
     // then
     expect(response).toHaveLength(1);
     expect(response[0]._id).toStrictEqual(activeAnnouncement._id);
   });
 
-  it("should return many active announcements with correct slug", async () => {
+  it("should return many active announcements with correct slug no debug", async () => {
     // given
     const mockApp = (await AppFactory.create(1))[0];
     const mockAnnouncements = await AnnouncementFactory.create(2);
@@ -376,9 +388,50 @@ describe("getActiveAnnouncements", () => {
     });
     await AppModel.create(mockApp);
     await AnnouncementModel.create(mockAnnouncements);
+    const isDebug = false;
 
     // when
-    const response = await appService.getActiveAnnouncements(mockApp.slug);
+    const response = await appService.getActiveAnnouncements(
+      mockApp.slug,
+      isDebug
+    );
+
+    // then
+    expect(response).toHaveLength(2);
+  });
+
+  it("should return many active announcements with correct slug with debug", async () => {
+    // given
+    const mockApp = (await AppFactory.create(1))[0];
+    const mockAnnouncements = await AnnouncementFactory.create(2);
+    mockAnnouncements[0].apps.push(mockApp.slug);
+    mockAnnouncements[1].apps.push(mockApp.slug);
+    mockAnnouncements[0].startDate = faker.date.between({
+      from: new Date().getTime() - 1000 * 60 * 60 * 24 * 365 * 1000,
+      to: mockAnnouncements[1].startDate,
+    });
+    mockAnnouncements[0].endDate = faker.date.between({
+      from: mockAnnouncements[1].endDate,
+      to: new Date().getTime() + 1000 * 60 * 60 * 24 * 365 * 1000,
+    });
+    mockAnnouncements[1].startDate = faker.date.between({
+      from: new Date().getTime() - 1000 * 60 * 60 * 24 * 365 * 1000,
+      to: mockAnnouncements[1].startDate,
+    });
+    mockAnnouncements[1].endDate = faker.date.between({
+      from: mockAnnouncements[1].endDate,
+      to: new Date().getTime() + 1000 * 60 * 60 * 24 * 365 * 1000,
+    });
+    mockAnnouncements.forEach((ann) => (ann.isDebug = true));
+    await AppModel.create(mockApp);
+    await AnnouncementModel.create(mockAnnouncements);
+    const isDebug = true;
+
+    // when
+    const response = await appService.getActiveAnnouncements(
+      mockApp.slug,
+      isDebug
+    );
 
     // then
     expect(response).toHaveLength(2);

@@ -38,6 +38,9 @@ export class Announcement {
   @prop()
   public imageUrl!: string;
 
+  @prop({ default: false })
+  public isDebug!: boolean;
+
   @prop()
   public link!: string;
 
