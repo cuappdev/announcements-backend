@@ -6,7 +6,7 @@ Backend for announcements.
 
 1. Duplicate the `.envtemplate` file and rename it to `.env`. Set `NODE_ENV` to `dev`, then set `DEV_URI` to `mongodb://localhost:27017/announcements-dev`.
 
-- For AppDev members, the development `.env` file is pinned in the `#announcements-dev` channel.
+- For AppDev members, the development `.env` file is pinned in the `#pod-announcements` channel.
 - Note that in order to run the database locally, you will need to have MongoDB installed.
 
 2. Run `yarn` to install dependencies.
