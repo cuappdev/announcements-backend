@@ -13,27 +13,37 @@ export class AnnouncementService {
    */
   public getAnnouncements = async (isDebug: boolean) => {
     if (isDebug) {
-      return await AnnouncementModel.find({ isDebug: true });
+      return await AnnouncementModel.find({ isDebug: true }).populate(
+        "creator"
+      );
     }
-    return await AnnouncementModel.find({ isDebug: false });
+    return await AnnouncementModel.find({ isDebug: false }).populate("creator");
   };
 
   /**
    * Insert an announcement into the database.
    *
    * @param announcementData The data for the new announcement.
+   * @param creatorId The ID of the user creating this announcement.
    * @throws InvalidArgumentError when invalid inputs are supplied.
    * @returns A promise resolving to the new announcement document.
    */
   public insertAnnouncement = async (
-    announcementData: AnnouncementCreationParams
+    announcementData: AnnouncementCreationParams,
+    creatorId: Types.ObjectId
   ) => {
     // Validate dates
     if (!isDateBefore(announcementData.startDate, announcementData.endDate)) {
       throw new InvalidArgumentError("Start date must be before end date");
     }
 
-    return await AnnouncementModel.create(announcementData);
+    const announcement = await AnnouncementModel.create({
+      ...announcementData,
+      creator: creatorId,
+    });
+    await announcement.populate("creator");
+
+    return announcement;
   };
 
   /**
@@ -87,6 +97,7 @@ export class AnnouncementService {
     if (!updatedAnnouncement) {
       throw new InvalidArgumentError("Invalid announcementId supplied");
     }
+    await updatedAnnouncement.populate("creator");
     return updatedAnnouncement;
   };
 
@@ -104,6 +115,7 @@ export class AnnouncementService {
     if (!deletedAnnouncement) {
       throw new InvalidArgumentError("Invalid announcementId supplied");
     }
+    await deletedAnnouncement.populate("creator");
     return deletedAnnouncement;
   };
 }

@@ -49,6 +49,16 @@ export const authMiddleware = async (
         name: payload.name,
       };
     }
+
+    // Add user information to request body for creating announcement
+    if (req.path === "/announcements" && req.method === "POST") {
+      req.body.creator = payload.email;
+    }
+
+    // Add user information to request body for creating a user
+    if (req.path === "/users" && req.method === "POST") {
+      req.body.imageUrl = payload.picture;
+    }
   } catch (err) {
     console.error(err);
     if (err instanceof Error) {

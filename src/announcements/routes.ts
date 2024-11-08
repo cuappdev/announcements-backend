@@ -1,6 +1,10 @@
 import { Types } from "mongoose";
 import { Announcement } from "./models";
-import { AnnouncementCreationParams, AnnouncementUpdateParams } from "./types";
+import {
+  AnnouncementCreationParams,
+  AnnouncementCreationParamsCreator,
+  AnnouncementUpdateParams,
+} from "./types";
 import { AnnouncementService } from "./services";
 import {
   Body,
@@ -17,16 +21,19 @@ import {
 } from "tsoa";
 import { exampleAnnouncement, exampleAnnouncements } from "./examples";
 import { AppService } from "../apps/services";
+import { UserService } from "../users/services";
 
 @Route("announcements")
 export class AnnouncementController extends Controller {
   private announcementService;
   private appService;
+  private userService;
 
   constructor() {
     super();
     this.announcementService = new AnnouncementService();
     this.appService = new AppService();
+    this.userService = new UserService();
   }
 
   /**
@@ -52,13 +59,16 @@ export class AnnouncementController extends Controller {
   @Example(exampleAnnouncement)
   @SuccessResponse(201, "Created")
   public async createAnnouncement(
-    @Body() req: AnnouncementCreationParams
+    @Body() req: AnnouncementCreationParamsCreator
   ): Promise<Announcement> {
     this.setStatus(201);
 
     // Validate app slugs
     await this.appService.validateAppSlugs(req.apps);
-    return this.announcementService.insertAnnouncement(req);
+
+    // Fetch email
+    const user = await this.userService.getUserByEmail(req.creator);
+    return this.announcementService.insertAnnouncement(req, user._id);
   }
 
   /**
