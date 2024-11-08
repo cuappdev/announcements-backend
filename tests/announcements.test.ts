@@ -13,6 +13,8 @@ import { faker } from "@faker-js/faker";
 import { AnnouncementModel } from "../src/announcements/models";
 import { AnnouncementService } from "../src/announcements/services";
 import AnnouncementFactory from "./mocks/AnnouncementFactory";
+import UserFactory from "./mocks/UserFactory";
+import { UserModel } from "../src/users/models";
 
 describe("getAnnouncements", () => {
   let announcementService: AnnouncementService;
@@ -95,15 +97,19 @@ describe("insertAnnouncements", () => {
     // given
     const mocks = await AnnouncementFactory.create(1);
     const mockAnnouncement = mocks[0];
+    const mockUser = (await UserFactory.create(1))[0];
+    const mockUserId = (await UserModel.create(mockUser))._id;
 
     // when
     const insertResponse = await announcementService.insertAnnouncement(
-      mockAnnouncement
+      mockAnnouncement,
+      mockUserId
     );
 
     // then
     expect(insertResponse.apps).toStrictEqual(mockAnnouncement.apps);
     expect(insertResponse.body).toStrictEqual(mockAnnouncement.body);
+    expect(insertResponse.creator?.id).toStrictEqual(mockUserId.toString());
     expect(insertResponse.endDate).toStrictEqual(mockAnnouncement.endDate);
     expect(insertResponse.imageUrl).toStrictEqual(mockAnnouncement.imageUrl);
     expect(insertResponse.isDebug).toStrictEqual(mockAnnouncement.isDebug);
@@ -117,15 +123,19 @@ describe("insertAnnouncements", () => {
     const mocks = await AnnouncementFactory.create(1);
     const mockAnnouncement = mocks[0];
     mockAnnouncement.isDebug = true;
+    const mockUser = (await UserFactory.create(1))[0];
+    const mockUserId = (await UserModel.create(mockUser))._id;
 
     // when
     const insertResponse = await announcementService.insertAnnouncement(
-      mockAnnouncement
+      mockAnnouncement,
+      mockUserId
     );
 
     // then
     expect(insertResponse.apps).toStrictEqual(mockAnnouncement.apps);
     expect(insertResponse.body).toStrictEqual(mockAnnouncement.body);
+    expect(insertResponse.creator?.id).toStrictEqual(mockUserId.toString());
     expect(insertResponse.endDate).toStrictEqual(mockAnnouncement.endDate);
     expect(insertResponse.imageUrl).toStrictEqual(mockAnnouncement.imageUrl);
     expect(insertResponse.isDebug).toStrictEqual(mockAnnouncement.isDebug);
@@ -142,10 +152,15 @@ describe("insertAnnouncements", () => {
       from: mockAnnouncement.endDate,
       to: new Date().getTime() + 1000 * 60 * 60 * 24 * 365 * 1000,
     });
+    const mockUser = (await UserFactory.create(1))[0];
+    const mockUserId = (await UserModel.create(mockUser))._id;
 
     // when
     const insertRequest = async () => {
-      await announcementService.insertAnnouncement(mockAnnouncement);
+      await announcementService.insertAnnouncement(
+        mockAnnouncement,
+        mockUserId
+      );
     };
 
     // then
