@@ -4,6 +4,7 @@ import {
   Delete,
   Example,
   Get,
+  Middlewares,
   Path,
   Post,
   Put,
@@ -15,6 +16,7 @@ import { exampleUser, exampleUsers } from "./examples";
 import { User } from "./models";
 import { UserCreationParams, UserLoginParams, UserUpdateParams } from "./types";
 import { Types } from "mongoose";
+import { authMiddleware } from "../middleware/authMiddleware";
 
 @Route("users")
 export class UserController extends Controller {
@@ -31,6 +33,7 @@ export class UserController extends Controller {
    * @returns An array containing all userse.
    */
   @Get()
+  @Middlewares(authMiddleware)
   @Example(exampleUsers)
   public async getAllUsers(): Promise<User[]> {
     return this.userService.getUsers();
@@ -43,6 +46,7 @@ export class UserController extends Controller {
    * @returns The User object that was created.
    */
   @Post()
+  @Middlewares(authMiddleware)
   @Example(exampleUser)
   @SuccessResponse(201, "Created")
   public async createUser(@Body() req: UserCreationParams): Promise<User> {
@@ -58,6 +62,7 @@ export class UserController extends Controller {
    * @returns The updated User object.
    */
   @Put("{userId}")
+  @Middlewares(authMiddleware)
   @Example(exampleUser)
   public async updateUser(
     @Path() userId: Types.ObjectId,
@@ -72,6 +77,7 @@ export class UserController extends Controller {
    * @returns The User object that was deleted.
    */
   @Delete("{userId}")
+  @Middlewares(authMiddleware)
   @Example(exampleUser)
   public async deleteUser(@Path() userId: Types.ObjectId): Promise<User> {
     return this.userService.deleteUser(userId);
@@ -84,6 +90,7 @@ export class UserController extends Controller {
    * @returns A User object.
    */
   @Post("login")
+  @Middlewares(authMiddleware)
   @Example(exampleUser)
   public async authenticateUser(@Body() req: UserLoginParams): Promise<User> {
     // Get user by email and update

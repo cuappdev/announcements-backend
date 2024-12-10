@@ -6,6 +6,7 @@ import {
   Delete,
   Example,
   Get,
+  Middlewares,
   Path,
   Post,
   Put,
@@ -15,6 +16,7 @@ import {
 import { exampleApp, exampleApps } from "./examples";
 import { AppCreationParams, AppUpdateParams } from "./types";
 import { Types } from "mongoose";
+import { authMiddleware } from "../middleware/authMiddleware";
 
 @Route("apps")
 export class AppController extends Controller {
@@ -31,6 +33,7 @@ export class AppController extends Controller {
    * @returns An array containing all apps.
    */
   @Get()
+  @Middlewares(authMiddleware)
   @Example(exampleApps)
   public async getAllApps(): Promise<App[]> {
     return this.appService.getApps();
@@ -43,6 +46,7 @@ export class AppController extends Controller {
    * @returns The App object that was created.
    */
   @Post()
+  @Middlewares(authMiddleware)
   @Example(exampleApp)
   @SuccessResponse(201, "Created")
   public async createApp(@Body() req: AppCreationParams): Promise<App> {
@@ -58,6 +62,7 @@ export class AppController extends Controller {
    * @returns The updated App object.
    */
   @Put("{appId}")
+  @Middlewares(authMiddleware)
   @Example(exampleApp)
   public async updateApp(
     @Path() appId: Types.ObjectId,
@@ -72,6 +77,7 @@ export class AppController extends Controller {
    * @returns The App object that was deleted.
    */
   @Delete("{appId}")
+  @Middlewares(authMiddleware)
   @Example(exampleApp)
   public async deleteApp(@Path() appId: Types.ObjectId): Promise<App> {
     return this.appService.deleteApp(appId);

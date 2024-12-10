@@ -1,19 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { OAuth2Client } from "google-auth-library";
-
-const client = new OAuth2Client();
+import { authClient } from "../utils/auth";
 
 export const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
-  // Exclude getActiveAnnouncements and API docs route
-  const routePattern = /^\/announcements\/\w+/;
-  if (routePattern.test(req.path)) {
-    return next();
-  }
-
   // Check if auth token was provided
   if (
     !req.headers.authorization ||
@@ -28,9 +20,8 @@ export const authMiddleware = async (
 
   // Verify auth token
   try {
-    const ticket = await client.verifyIdToken({
+    const ticket = await authClient.verifyIdToken({
       idToken: token,
-      audience: process.env.CLIENT_ID,
     });
 
     const payload = ticket.getPayload();

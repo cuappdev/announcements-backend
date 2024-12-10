@@ -1,7 +1,6 @@
 import { Types } from "mongoose";
 import { Announcement } from "./models";
 import {
-  AnnouncementCreationParams,
   AnnouncementCreationParamsCreator,
   AnnouncementUpdateParams,
 } from "./types";
@@ -12,6 +11,7 @@ import {
   Delete,
   Example,
   Get,
+  Middlewares,
   Path,
   Post,
   Put,
@@ -22,6 +22,7 @@ import {
 import { exampleAnnouncement, exampleAnnouncements } from "./examples";
 import { AppService } from "../apps/services";
 import { UserService } from "../users/services";
+import { authMiddleware } from "../middleware/authMiddleware";
 
 @Route("announcements")
 export class AnnouncementController extends Controller {
@@ -42,6 +43,7 @@ export class AnnouncementController extends Controller {
    * @returns An array containing all announcements.
    */
   @Get()
+  @Middlewares(authMiddleware)
   @Example(exampleAnnouncements)
   public async getAllAnnouncements(
     @Query() debug: boolean
@@ -56,6 +58,7 @@ export class AnnouncementController extends Controller {
    * @returns The Announcement object that was created.
    */
   @Post()
+  @Middlewares(authMiddleware)
   @Example(exampleAnnouncement)
   @SuccessResponse(201, "Created")
   public async createAnnouncement(
@@ -79,6 +82,7 @@ export class AnnouncementController extends Controller {
    * @returns The updated Announcement object.
    */
   @Put("{announcementId}")
+  @Middlewares(authMiddleware)
   @Example(exampleAnnouncement)
   public async updateAnnouncement(
     @Path() announcementId: Types.ObjectId,
@@ -97,6 +101,7 @@ export class AnnouncementController extends Controller {
    * @returns The Announcement object that was deleted.
    */
   @Delete("{announcementId}")
+  @Middlewares(authMiddleware)
   @Example(exampleAnnouncement)
   public async deleteAnnouncement(
     @Path() announcementId: Types.ObjectId
