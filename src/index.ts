@@ -4,10 +4,14 @@ import swaggerUI from "swagger-ui-express";
 import { RegisterRoutes } from "../build/routes";
 import { dbConnect } from "./database";
 import { errorMiddleware } from "./middleware/errorMiddleware";
+import cors from "cors";
 
 // Express Server
 const app = express();
 app.use(bodyParser.json());
+
+// CORS
+app.use(cors({ origin: "http://localhost:3000", optionsSuccessStatus: 200 }));
 
 // Default Route
 app.get("/", (req, res) => {
