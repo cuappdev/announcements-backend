@@ -11,7 +11,6 @@ const app = express();
 app.use(bodyParser.json());
 
 // CORS
-app.use(cors({ origin: "http://localhost:3000", optionsSuccessStatus: 200 }));
 app.use(
   cors({
     origin: "https://announcements.cornellappdev.com",
