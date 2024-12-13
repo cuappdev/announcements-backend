@@ -12,6 +12,12 @@ app.use(bodyParser.json());
 
 // CORS
 app.use(cors({ origin: "http://localhost:3000", optionsSuccessStatus: 200 }));
+app.use(
+  cors({
+    origin: "https://announcements.cornellappdev.com",
+    optionsSuccessStatus: 200,
+  })
+);
 
 // Default Route
 app.get("/", (req, res) => {
