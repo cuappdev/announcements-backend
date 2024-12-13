@@ -49,7 +49,7 @@ export const authMiddleware = async (
     // Add user information to request body for creating a user
     if (req.path === "/users" && req.method === "POST") {
       req.body.imageUrl = payload.picture;
-      req.body.name = payload.name;
+      req.body.name = "";
     }
   } catch (err) {
     console.error(err);
